@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react'
 import Header from '../Components/Header'
-import { error } from 'console';
+import getWeather from "../Hooks/Weather"
 
 interface weatherData {
   location: {
@@ -20,27 +20,11 @@ interface weatherData {
 export default function Home() {
   
   const [location, setLocation] = useState<string>("")
-  const [weatherInfo, setWeatheInfo]= useState<string>("")
+
   const [userInput,setUserInput] = useState("")
-  const weatherApiKey:string = " ";
+  const weatherApiKey:string = "";
   
-  useEffect(() => {
-     if (!location) return;
-    const fetchWeather= async() =>{
-      try {
-        const response = await fetch(
-          `https://api.weatherapi.com/v1/current.json?key=${weatherApiKey}&q=${location}&aqi=no`);
-          if(!response.ok){
-            throw new Error("Failed to Fetch")
-          }
-          const data: weatherData = await response.json();
-          setWeatheInfo(data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchWeather();
-  }, [location])
+  const weatherInfo = getWeather(location,weatherApiKey)  
   
   const handleLocation = (name:string) =>{
     setLocation(name)
